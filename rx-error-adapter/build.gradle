@@ -3,7 +3,7 @@ apply plugin: 'kotlin-kapt'
 apply from: 'publish.gradle'
 apply from: 'bintray.gradle'
 
-project.archivesBaseName ='rxerroradapter'
+project.archivesBaseName ='rx-error-adapter'
 
 task sourcesJar(type: Jar) {
     from sourceSets.main.java.srcDirs

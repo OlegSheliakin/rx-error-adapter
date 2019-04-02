@@ -1,1 +1,1 @@
-include ':app', ':rxerroradadpter'
+include ':app', ':rx-error-adapter'
