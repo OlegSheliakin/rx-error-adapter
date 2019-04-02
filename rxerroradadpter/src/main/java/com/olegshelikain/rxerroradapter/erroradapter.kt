@@ -6,6 +6,10 @@ package com.olegshelikain.rxerroradapter
  */
 typealias ErrorAdapter<T> = (T) -> Throwable?
 
+fun <T : Throwable> ErrorAdapter<T>.asChain() : ErrorAdaptersChain<T> = ErrorAdaptersChain.create<T> {
+    addNext(this@asChain)
+}
+
 object Identity : ErrorAdapter<Throwable> {
     override fun invoke(error: Throwable): Throwable? = error
 }

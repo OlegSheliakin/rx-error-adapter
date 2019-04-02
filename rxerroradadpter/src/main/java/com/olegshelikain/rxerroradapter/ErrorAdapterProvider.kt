@@ -13,8 +13,10 @@ class ErrorAdapterProvider private constructor() {
     }
 
     companion object {
-        fun create(builder: ErrorAdapterProvider.() -> ErrorAdapterProvider) : ErrorAdapterProvider {
-            return builder.invoke(ErrorAdapterProvider())
+        fun create(builder: ErrorAdapterProvider.() -> Unit) : ErrorAdapterProvider {
+            return ErrorAdapterProvider().apply {
+                builder.invoke(this)
+            }
         }
     }
 

@@ -1,6 +1,5 @@
 package com.olegshelikain.rxerroradapter
 
-import io.reactivex.Scheduler
 import retrofit2.CallAdapter
 import retrofit2.HttpException
 import retrofit2.Retrofit
@@ -18,7 +17,7 @@ class RxErrorCallAdapterFactory private constructor(
 
     companion object {
         fun create(
-            withScheduler: Scheduler? = null,
+            delegate: RxJava2CallAdapterFactory,
             httpExceptionAdapter: HttpExceptionAdapter
         ): RxErrorCallAdapterFactory {
 
@@ -26,29 +25,24 @@ class RxErrorCallAdapterFactory private constructor(
                 register(HttpException::class, httpExceptionAdapter)
             }
 
-            return RxErrorCallAdapterFactory(createRxJavaCallAdapterFactory(withScheduler), errorAdapterProvider)
+            return RxErrorCallAdapterFactory(delegate, errorAdapterProvider)
         }
 
         fun create(
-            withScheduler: Scheduler? = null,
+            delegate: RxJava2CallAdapterFactory,
             errorAdapterProvider: ErrorAdapterProvider
         ): RxErrorCallAdapterFactory {
-            return RxErrorCallAdapterFactory(createRxJavaCallAdapterFactory(withScheduler), errorAdapterProvider)
+            return RxErrorCallAdapterFactory(delegate, errorAdapterProvider)
         }
 
-        private fun createRxJavaCallAdapterFactory(withScheduler: Scheduler?): RxJava2CallAdapterFactory {
-            return if (withScheduler != null) {
-                RxJava2CallAdapterFactory.createWithScheduler(withScheduler)
-            } else {
-                RxJava2CallAdapterFactory.create()
-            }
-        }
     }
 
     @Suppress("UNCHECKED_CAST")
     override fun get(returnType: Type, annotations: Array<Annotation>, retrofit: Retrofit): CallAdapter<Any, Any>? {
         val callAdapter = delegate.get(returnType, annotations, retrofit) as? CallAdapter<in Any, out Any>
-        return if (callAdapter == null) null else RxErrorCallAdapter(
+        return if (callAdapter == null) {
+            null
+        } else RxErrorCallAdapter(
             callAdapter,
             errorAdapterProvider
         )
