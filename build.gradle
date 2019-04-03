@@ -6,7 +6,8 @@ ext {
     artifact = 'rx-error-adapter'
     publishedGroupId = 'com.olegsheliakin'
     libraryName = 'rx-error-adapter'
-    libraryVersion = '0.0.2'
+    libraryVersion = '0.0.5'
+
     libraryDescription = 'RxJava error adapter for Retrofit.'
 
     siteUrl = 'https://github.com/OlegSheliakin/rx-error-adapter'

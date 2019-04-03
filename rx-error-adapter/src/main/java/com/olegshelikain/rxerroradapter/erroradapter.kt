@@ -1,12 +1,19 @@
 package com.olegshelikain.rxerroradapter
 
 /**
- * Created by olegshelyakin on 01/04/2019.
+ * Created by Oleg Sheliakin on 01.04.2019.
  * Contact me by email - olegsheliakin@gmail.com
  */
 typealias ErrorAdapter<T> = (T) -> Throwable?
 
-fun <T : Throwable> ErrorAdapter<T>.asChain() = ErrorAdapterChain.create(this)
+object Identity : ErrorAdapter<Throwable> {
+    override fun invoke(error: Throwable): Throwable? = error
+}
+
+fun <T : Throwable> ErrorAdapter<T>.asChain(): ErrorAdaptersChain<T> = ErrorAdaptersChain.create<T> {
+    addNext(this@asChain)
+}
+
 
 class ErrorAdapterChain<T : Throwable> private constructor(
     private val errorAdapter: ErrorAdapter<T>
@@ -28,5 +35,3 @@ class ErrorAdapterChain<T : Throwable> private constructor(
     }
 
 }
-
-

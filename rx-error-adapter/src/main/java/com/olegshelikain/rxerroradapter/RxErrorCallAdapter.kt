@@ -9,7 +9,7 @@ import retrofit2.CallAdapter
 import java.lang.reflect.Type
 
 /**
- * Created by olegshelyakin on 01/04/2019.
+ * Created by Oleg Sheliakin on 01.04.2019.
  * Contact me by email - olegsheliakin@gmail.com
  */
 internal class RxErrorCallAdapter constructor(

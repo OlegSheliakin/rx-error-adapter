@@ -3,7 +3,7 @@ package com.olegshelikain.rxerroradapter
 import kotlin.reflect.KClass
 
 /**
- * Created by olegshelyakin on 01/04/2019.
+ * Created by Oleg Sheliakin on 01.04.2019.
  * Contact me by email - olegsheliakin@gmail.com
  */
 class ErrorAdapterProvider private constructor() {
@@ -13,13 +13,15 @@ class ErrorAdapterProvider private constructor() {
     }
 
     companion object {
-        fun create(builder: ErrorAdapterProvider.() -> ErrorAdapterProvider): ErrorAdapterProvider {
-           return builder.invoke(ErrorAdapterProvider())
+        fun create(builder: ErrorAdapterProvider.() -> Unit) : ErrorAdapterProvider {
+            return ErrorAdapterProvider().apply {
+                builder.invoke(this)
+            }
         }
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T : Throwable> register(klazz: KClass<T>, adapter: ErrorAdapter<T>): ErrorAdapterProvider {
+    fun <T : Throwable> register(klazz: KClass<T>, adapter: ErrorAdapter<T>) : ErrorAdapterProvider {
         mapOfAdapters[klazz] = adapter as ErrorAdapter<Throwable>
         return this
     }
