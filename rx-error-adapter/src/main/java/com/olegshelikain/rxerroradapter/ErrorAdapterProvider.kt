@@ -2,6 +2,10 @@ package com.olegshelikain.rxerroradapter
 
 import kotlin.reflect.KClass
 
+/**
+ * Created by olegshelyakin on 01/04/2019.
+ * Contact me by email - olegsheliakin@gmail.com
+ */
 class ErrorAdapterProvider private constructor() {
 
     private val mapOfAdapters: MutableMap<KClass<out Throwable>, ErrorAdapter<Throwable>> by lazy {
@@ -9,15 +13,18 @@ class ErrorAdapterProvider private constructor() {
     }
 
     companion object {
-        fun create() = ErrorAdapterProvider()
+        fun create(builder: ErrorAdapterProvider.() -> ErrorAdapterProvider): ErrorAdapterProvider {
+           return builder.invoke(ErrorAdapterProvider())
+        }
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T : Throwable> register(klazz: KClass<T>, adapter: ErrorAdapter<T>) {
+    fun <T : Throwable> register(klazz: KClass<T>, adapter: ErrorAdapter<T>): ErrorAdapterProvider {
         mapOfAdapters[klazz] = adapter as ErrorAdapter<Throwable>
+        return this
     }
 
-    fun provide(throwable: Throwable): ErrorAdapter<Throwable>? {
+    internal fun provide(throwable: Throwable): ErrorAdapter<Throwable>? {
         return mapOfAdapters[throwable::class]
     }
 

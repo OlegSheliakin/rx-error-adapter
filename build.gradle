@@ -1,17 +1,17 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 ext {
     bintrayRepo = 'maven'
-    bintrayName = 'rxerroradapter'
+    bintrayName = 'rx-error-adapter'
 
-    artifact = 'rxerroradapter'
+    artifact = 'rx-error-adapter'
     publishedGroupId = 'com.olegsheliakin'
-    libraryName = 'rxerroradapter'
-    libraryVersion = '0.0.1'
+    libraryName = 'rx-error-adapter'
+    libraryVersion = '0.0.2'
     libraryDescription = 'RxJava error adapter for Retrofit.'
 
-    siteUrl = 'https://github.com/OlegSheliakin/rxerroradapter'
-    issuesUrl = 'https://github.com/OlegSheliakin/rxerroradapter/issues'
-    gitUrl = 'https://github.com/OlegSheliakin/rxerroradapter.git'
+    siteUrl = 'https://github.com/OlegSheliakin/rx-error-adapter'
+    issuesUrl = 'https://github.com/OlegSheliakin/rx-error-adapter/issues'
+    gitUrl = 'https://github.com/OlegSheliakin/rx-error-adapter.git'
 
     developerId = 'olegsheliakin'
     developerName = 'Oleg Sheliakin'
@@ -45,7 +45,7 @@ allprojects {
     repositories {
         google()
         jcenter()
-        
+        maven { url = "https://dl.bintray.com/olegsheliakin/maven"}
     }
 }
 

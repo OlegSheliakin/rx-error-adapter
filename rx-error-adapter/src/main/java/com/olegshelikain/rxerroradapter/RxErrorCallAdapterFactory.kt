@@ -7,50 +7,46 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import java.lang.reflect.Type
 
+/**
+ * Created by olegshelyakin on 01/04/2019.
+ * Contact me by email - olegsheliakin@gmail.com
+ */
 class RxErrorCallAdapterFactory private constructor(
     private val delegate: RxJava2CallAdapterFactory,
     private val errorAdapterProvider: ErrorAdapterProvider
 ) : CallAdapter.Factory() {
 
     companion object {
-        fun create(
+
+        fun createHttpErrorAdapter(
             withScheduler: Scheduler? = null,
             httpExceptionAdapter: HttpExceptionAdapter
         ): RxErrorCallAdapterFactory {
-
-            val errorAdapterProvider = ErrorAdapterProvider.create().apply {
+            val errorAdapterProvider = ErrorAdapterProvider.create {
                 register(HttpException::class, httpExceptionAdapter)
             }
 
-            return if (withScheduler != null) {
-                RxErrorCallAdapterFactory(
-                    RxJava2CallAdapterFactory.createWithScheduler(
-                        withScheduler
-                    ), errorAdapterProvider
-                )
-            } else {
-                RxErrorCallAdapterFactory(
-                    RxJava2CallAdapterFactory.create(),
-                    errorAdapterProvider
-                )
-            }
+            return RxErrorCallAdapterFactory(
+                createRxCallAdapter(withScheduler),
+                errorAdapterProvider
+            )
         }
 
         fun create(
             withScheduler: Scheduler? = null,
             errorAdapterProvider: ErrorAdapterProvider
         ): RxErrorCallAdapterFactory {
+            return RxErrorCallAdapterFactory(
+                createRxCallAdapter(withScheduler),
+                errorAdapterProvider
+            )
+        }
+
+        private fun createRxCallAdapter(withScheduler: Scheduler?): RxJava2CallAdapterFactory {
             return if (withScheduler != null) {
-                RxErrorCallAdapterFactory(
-                    RxJava2CallAdapterFactory.createWithScheduler(
-                        withScheduler
-                    ), errorAdapterProvider
-                )
+                RxJava2CallAdapterFactory.createWithScheduler(withScheduler)
             } else {
-                RxErrorCallAdapterFactory(
-                    RxJava2CallAdapterFactory.create(),
-                    errorAdapterProvider
-                )
+                RxJava2CallAdapterFactory.create()
             }
         }
     }
@@ -58,7 +54,9 @@ class RxErrorCallAdapterFactory private constructor(
     @Suppress("UNCHECKED_CAST")
     override fun get(returnType: Type, annotations: Array<Annotation>, retrofit: Retrofit): CallAdapter<Any, Any>? {
         val callAdapter = delegate.get(returnType, annotations, retrofit) as? CallAdapter<in Any, out Any>
-        return if (callAdapter == null) null else RxErrorCallAdapter(
+        return if (callAdapter == null) {
+            null
+        } else RxErrorCallAdapter(
             callAdapter,
             errorAdapterProvider
         )
