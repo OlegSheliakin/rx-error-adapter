@@ -4,3 +4,12 @@
 
 Rx error call adapter for Retrofit.
 
+# Download
+~~~ groovy
+dependencies {
+  impelentation 'com.olegsheliakin:rx-error-adapter:latest'
+}
+~~~
+
+# How to use?
+
