@@ -11,11 +11,11 @@ import java.lang.Exception
  */
 class ErrorAdaptersChainTest {
 
-    private lateinit var mainErrorAdapter: FakeErrorAdapter
+    private lateinit var mainErrorAdapter: FakeErrorAdapter<TestException>
 
-    private lateinit var detailErrorAdapter: FakeErrorAdapter
+    private lateinit var detailErrorAdapter: FakeErrorAdapter<TestException>
 
-    private lateinit var thirdErrorAdapter: FakeErrorAdapter
+    private lateinit var thirdErrorAdapter: FakeErrorAdapter<TestException>
 
     @Before
     fun setUp() {
@@ -70,17 +70,5 @@ class ErrorAdaptersChainTest {
         object First : TestException()
         object Second : TestException()
         object Third : TestException()
-    }
-
-    class FakeErrorAdapter(private val errorAdapter: ErrorAdapter<TestException>) : ErrorAdapter<TestException> {
-        var isAdapted = false
-
-        override fun invoke(p1: TestException): Throwable? {
-            val res = errorAdapter.invoke(p1)
-            if(res != null) {
-                isAdapted = true
-            }
-            return res
-        }
     }
 }

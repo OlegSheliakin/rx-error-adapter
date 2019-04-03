@@ -39,7 +39,7 @@ class SimpleHttpExceptionAdapter private constructor(
         }
 
         if (error.code() in 400..499) {
-            return keySelector.select(responseError)?.let {
+            return keySelector.invoke(responseError)?.let {
                 specificAdapters[it]?.invoke(responseError)
             } ?: defaultErrorAdapter?.invoke(responseError)
         }
