@@ -18,3 +18,10 @@ data class IntKey(val code: Int) : Key {
 data class StringKey(val code: String) : Key {
     override fun generateKey(): String = code
 }
+
+class HttpCodeKeySelector() : KeySelector {
+    override fun invoke(p1: HttpResponseError): Key? {
+        return IntKey(p1.httpCode)
+    }
+
+}

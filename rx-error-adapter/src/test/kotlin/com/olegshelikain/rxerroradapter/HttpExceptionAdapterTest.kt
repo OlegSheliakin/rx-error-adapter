@@ -11,7 +11,7 @@ import retrofit2.Response
  * Created by olegshelyakin on 03/04/2019.
  * Contact me by email - olegsheliakin@gmail.com
  */
-class SimpleHttpExceptionAdapterTest {
+class HttpExceptionAdapterTest {
 
     private val keySelector: KeySelector = {
         IntKey(it.httpCode)
@@ -30,7 +30,7 @@ class SimpleHttpExceptionAdapterTest {
         )
     }
 
-    private val subject = SimpleHttpExceptionAdapter.create(keySelector) {
+    private val subject = HttpExceptionAdapter.create(keySelector) {
         setDefaultAdapter(defAdapter)
         register(400, badRequestAdapter)
     }

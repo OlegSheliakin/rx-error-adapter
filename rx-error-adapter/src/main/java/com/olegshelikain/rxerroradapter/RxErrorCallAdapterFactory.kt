@@ -18,7 +18,7 @@ class RxErrorCallAdapterFactory private constructor(
     companion object {
         fun create(
             delegate: RxJava2CallAdapterFactory,
-            httpExceptionAdapter: HttpExceptionAdapter
+            httpExceptionAdapter: ErrorAdapter<HttpException>
         ): RxErrorCallAdapterFactory {
 
             val errorAdapterProvider = ErrorAdapterProvider.create {
