@@ -6,11 +6,9 @@ project.archivesBaseName ='rx-error-adapter'
 
 task sourcesJar(type: Jar) {
     from sourceSets.main.java.srcDirs
-    classifier = 'sources'
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
     from javadoc.destinationDir
 }
 
@@ -22,6 +20,7 @@ artifacts {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    implementation "io.reactivex.rxjava2:rxjava:2.2.8"
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.5.0'
     testImplementation 'junit:junit:4.12'
 }

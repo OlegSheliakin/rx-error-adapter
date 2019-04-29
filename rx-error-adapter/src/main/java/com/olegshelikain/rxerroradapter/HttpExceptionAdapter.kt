@@ -3,16 +3,22 @@ package com.olegshelikain.rxerroradapter
 import retrofit2.HttpException
 
 /**
- * It adapts HttpException with status code only in range 400..599, otherwise it doesn't perform any adaptation
+ * It can be used to adapt only HttpException.
  */
 class HttpExceptionAdapter private constructor(
     private val keySelector: KeySelector
 ) : ErrorAdapter<HttpException> {
 
+    /**
+     * It adapts throwable if there is not any specific adapter.
+     */
     private var defaultErrorAdapter: ErrorAdapter<HttpResponseError>? = null
 
-    private val specificAdapters: MutableMap<Key, ErrorAdapter<HttpResponseError>> by lazy {
-        return@lazy mutableMapOf<Key, ErrorAdapter<HttpResponseError>>()
+    /**
+     * Map of specific adapters. It uses to get adapter by Key.
+     */
+    private val specificAdapters: MutableMap<String, ErrorAdapter<HttpResponseError>> by lazy {
+        return@lazy mutableMapOf<String, ErrorAdapter<HttpResponseError>>()
     }
 
     companion object {
@@ -26,6 +32,10 @@ class HttpExceptionAdapter private constructor(
 
     }
 
+    /**
+     * Tries to adapt throwable.
+     * @return adapted throwable or null if there is no any adapter.
+     */
     override fun invoke(error: HttpException): Throwable? {
         val errorBodyString = error.response().errorBody()?.string()
         val responseError = HttpResponseError(
@@ -34,25 +44,13 @@ class HttpExceptionAdapter private constructor(
             errorBodyString = errorBodyString
         )
 
-        if (error.code() in 500..599) {
-            return ServerError(
-                httpCode = responseError.httpCode,
-                message = responseError.message
-            )
-        }
-
-        if (error.code() in 400..499) {
-            return keySelector.invoke(responseError)?.let {
-                specificAdapters[it]?.invoke(responseError)
-            } ?: defaultErrorAdapter?.invoke(responseError)
-        }
-
-        return UnexpectedError(responseError)
+       return keySelector.invoke(responseError)?.let {
+            specificAdapters[it.generateKey()]?.invoke(responseError)
+        } ?: defaultErrorAdapter?.invoke(responseError)
     }
 
     /**
      * Sets default error adapter.
-     * It is called if there is not any specific adapter
      */
     fun setDefaultAdapter(adapter: ErrorAdapter<HttpResponseError>): HttpExceptionAdapter {
         this.defaultErrorAdapter = adapter
@@ -60,27 +58,26 @@ class HttpExceptionAdapter private constructor(
     }
 
     /**
-     * Registers specific error adapter by Key
+     * Registers specific error adapter by Key.
      */
     fun register(code: Key, adapter: ErrorAdapter<HttpResponseError>): HttpExceptionAdapter {
-        specificAdapters[code] = adapter
+        specificAdapters[code.generateKey()] = adapter
         return this
     }
 
     /**
-     * Registers specific error adapter by IntKey
+     * Registers specific error adapter by IntKey.
      */
     fun register(code: Int, adapter: ErrorAdapter<HttpResponseError>): HttpExceptionAdapter {
-        specificAdapters[IntKey(code)] = adapter
+        specificAdapters[IntKey(code).generateKey()] = adapter
         return this
     }
 
     /**
-     * Registers specific error adapter by StringKey
+     * Registers specific error adapter by StringKey.
      */
     fun register(code: String, adapter: ErrorAdapter<HttpResponseError>): HttpExceptionAdapter {
-        specificAdapters[StringKey(code)] = adapter
+        specificAdapters[StringKey(code).generateKey()] = adapter
         return this
     }
 }
-

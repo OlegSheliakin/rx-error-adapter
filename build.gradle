@@ -6,7 +6,7 @@ ext {
     artifact = 'rx-error-adapter'
     publishedGroupId = 'com.olegsheliakin'
     libraryName = 'rx-error-adapter'
-    libraryVersion = '0.0.6'
+    libraryVersion = '0.0.9'
 
     libraryDescription = 'RxJava error adapter for Retrofit.'
 
@@ -33,7 +33,7 @@ buildscript {
         
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.2'
+        classpath 'com.android.tools.build:gradle:3.4.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'

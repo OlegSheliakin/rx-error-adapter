@@ -6,6 +6,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import retrofit2.Call
 import retrofit2.CallAdapter
+import retrofit2.adapter.rxjava2.HttpException
 import java.lang.reflect.Type
 
 /**

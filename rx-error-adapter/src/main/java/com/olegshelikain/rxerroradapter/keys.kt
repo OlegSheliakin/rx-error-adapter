@@ -5,7 +5,7 @@ package com.olegshelikain.rxerroradapter
  * Contact me by email - olegsheliakin@gmail.com
  */
 
-typealias KeySelector = (HttpResponseError) -> Key?
+typealias KeySelector = (HttpResponseError) -> Key
 
 interface Key {
     fun generateKey(): String
@@ -19,8 +19,8 @@ data class StringKey(val code: String) : Key {
     override fun generateKey(): String = code
 }
 
-class HttpCodeKeySelector() : KeySelector {
-    override fun invoke(p1: HttpResponseError): Key? {
+class HttpCodeKeySelector : KeySelector {
+    override fun invoke(p1: HttpResponseError): Key {
         return IntKey(p1.httpCode)
     }
 

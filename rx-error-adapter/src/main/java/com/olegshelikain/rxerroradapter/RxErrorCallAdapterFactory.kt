@@ -22,7 +22,7 @@ class RxErrorCallAdapterFactory private constructor(
         ): RxErrorCallAdapterFactory {
 
             val errorAdapterProvider = ErrorAdapterProvider.create {
-                register(HttpException::class, httpExceptionAdapter)
+                register(retrofit2.adapter.rxjava2.HttpException::class, httpExceptionAdapter::invoke)
             }
 
             return RxErrorCallAdapterFactory(delegate, errorAdapterProvider)

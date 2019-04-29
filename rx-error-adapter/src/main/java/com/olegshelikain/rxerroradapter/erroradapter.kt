@@ -10,7 +10,7 @@ object Identity : ErrorAdapter<Throwable> {
     override fun invoke(error: Throwable): Throwable? = error
 }
 
-fun <T : Throwable> ErrorAdapter<T>.asChain(): ErrorAdaptersChain<T> = ErrorAdaptersChain.create<T> {
+fun <T : Throwable> ErrorAdapter<T>.asChain(): ErrorAdaptersChain<T> = ErrorAdaptersChain.create {
     addNext(this@asChain)
 }
 
@@ -22,7 +22,7 @@ class ErrorAdapterChain<T : Throwable> private constructor(
     private var next: ErrorAdapter<T>? = null
 
     companion object {
-        fun <T : Throwable> create(errorAdapter: ErrorAdapter<T>) = ErrorAdapterChain<T>(errorAdapter)
+        fun <T : Throwable> create(errorAdapter: ErrorAdapter<T>) = ErrorAdapterChain(errorAdapter)
     }
 
     fun addNext(errorAdapter: ErrorAdapter<T>): ErrorAdapterChain<T> {
